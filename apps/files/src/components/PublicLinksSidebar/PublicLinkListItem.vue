@@ -9,7 +9,7 @@
         <oc-icon v-else name="lock" class="uk-invisible" />
       </oc-table-cell>
       <oc-table-cell>
-        <a :href="link.url" target="_blank" :uk-tooltip="$_tooltipTextLink" class="uk-text-bold uk-text-truncate oc-files-file-link-url">{{ link.name }}</a>
+        <a :href="link.url" target="_blank" :uk-tooltip="$_tooltipTextLink" class="uk-text-bold uk-text-truncate oc-files-file-link-url">{{ $_linkNameText }}</a>
         <br>
         <span class="uk-text-meta uk-text-break">
           <span class="oc-files-file-link-role">{{ link.description }}</span>
@@ -80,6 +80,9 @@ export default {
     }
   },
   computed: {
+    $_linkNameText () {
+      return this.link.name ? this.link.name : this.link.token
+    },
     $_loadingSpinnerVisible () {
       return this.modifiable && this.removalInProgress
     },
