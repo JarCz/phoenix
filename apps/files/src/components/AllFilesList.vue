@@ -2,10 +2,6 @@
   <file-list :fileData="fileData" id="files-list" :loading="loadingFolder" :actions="actions" :compactMode="_sidebarOpen"
       :isActionEnabled="isActionEnabled">
     <template #headerColumns>
-      <div v-if="!publicPage()">
-        <span class="oc-visually-hidden" v-text="favoritesHeaderText" />
-        <oc-star id="files-table-header-star" aria-hidden="true" class="uk-display-block uk-disabled" />
-      </div>
       <div class="uk-text-truncate uk-text-meta uk-width-expand" ref="headerNameColumn" >
         <sortable-column-header
           @click="toggleSort('name')"
@@ -44,9 +40,6 @@
       </div>
     </template>
     <template #rowColumns="{ item, index }">
-      <div v-if="!publicPage()">
-        <oc-star class="uk-display-block" @click.native.stop="toggleFileFavorite(item)" :shining="item.starred" />
-      </div>
       <div class="uk-text-truncate uk-width-expand" :ref="index === 0 ? 'firstRowNameColumn' : null">
         <file-item
           @click.native.stop="item.type === 'folder' ? navigateTo(item.path.substr(1)) : openFileActionBar(item)"
@@ -141,11 +134,6 @@ export default {
     FileActions
   ],
   props: ['fileData', 'starsEnabled', 'checkboxEnabled', 'dateEnabled', 'parentFolder'],
-  data () {
-    return {
-      favoritesHeaderText: this.$gettext('Favorites')
-    }
-  },
   computed: {
     ...mapState(['route']),
     ...mapGetters('Files', [
@@ -237,7 +225,6 @@ export default {
   methods: {
     ...mapActions('Files', [
       'loadFolder',
-      'markFavorite',
       'setHighlightedFile'
     ]),
 
@@ -287,12 +274,6 @@ export default {
           desc: error.message,
           status: 'danger'
         })
-      })
-    },
-    toggleFileFavorite (item) {
-      this.markFavorite({
-        client: this.$client,
-        file: item
       })
     },
 

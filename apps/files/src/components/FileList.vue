@@ -160,19 +160,13 @@ export default {
     }
   },
   methods: {
-    ...mapActions('Files', ['loadFolder', 'markFavorite',
+    ...mapActions('Files', ['loadFolder',
       'setHighlightedFile', 'setPublicLinkPassword',
       'resetFileSelection', 'addFileSelection', 'removeFileSelection', 'toggleFileSelection'
     ]),
 
     labelSelectSingleItem (item) {
       return this.$gettextInterpolate(this.labelSelectSingleItemText, { name: item.name, type: item.type }, true)
-    },
-    toggleFileFavorite (item) {
-      this.markFavorite({
-        client: this.$client,
-        file: item
-      })
     },
     $_ocFileName (item) {
       if (this.$route.name === 'files-favorites') {

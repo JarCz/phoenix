@@ -40,6 +40,14 @@ export default {
             }
             return item.canBeDeleted()
           }
+        },
+        {
+          icon: 'star',
+          handler: this.toggleFileFavorite,
+          ariaLabel: this.$gettext('Mark/Unmark as favorite'),
+          isEnabled: function () {
+            return true
+          }
         }
       ]
       // FIXME: we are assuming this.fileSideBars and others are available on object
@@ -66,7 +74,8 @@ export default {
   methods: {
     ...mapActions('Files', [
       'renameFile', 'promptFileRename', 'closePromptFileRename',
-      'deleteFiles', 'promptFileDelete', 'closePromptFileDelete'
+      'deleteFiles', 'promptFileDelete', 'closePromptFileDelete',
+      'markFavorite'
     ]),
     ...mapActions(['showMessage']),
 
@@ -112,7 +121,19 @@ export default {
         this.closePromptFileRename()
       })
     },
-
+    toggleFileFavorite (file) {
+      this.markFavorite({
+        client: this.$client,
+        file: file
+      }).catch(() => {
+        const translated = this.$gettext('Error while starring "%{file}"')
+        const title = this.$gettextInterpolate(translated, { file: file.name }, true)
+        this.showMessage({
+          title: title,
+          status: 'danger'
+        })
+      })
+    },
     cancelDeleteFile () {
       this.closePromptFileDelete()
     },
@@ -125,7 +146,7 @@ export default {
       })
     },
     reallyDeleteFiles () {
-      let files = this.deleteDialogSelectedFiles ? this.deleteDialogSelectedFiles : this.selectedFiles
+      let files = this.dfavoriteFileeleteDialogSelectedFiles ? this.deleteDialogSelectedFiles : this.selectedFiles
       if (!Array.isArray(files)) {
         files = [files]
       }
